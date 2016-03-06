@@ -1,0 +1,30 @@
+<!-- index.html -->
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+	<title>面向设计的版封装date控件？</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" href="css/datetime.css">
+	<script data-main="js/main" src="js/require-2.1.11.js"></script>
+	<style>
+		.form-group{
+			height: 30px;
+			margin:15px auto;
+			position: relative;
+		}
+	</style>
+</head>
+<body>
+	<div class="warp-page">
+		<form action="">
+			<div class="form-group">
+				<label for="choice-date">请选择开始/结束时间：</label>
+				<input id="choice-date1" type="date" data-max="2016-12-31" data-min="2016-01-01" data-now="" value="">
+				-
+				<input id="choice-date2" type="date" data-max="2016-12-31" data-min="2016-01-01" data-now="" value="">
+			</div>
+		</form>
+	</div>
+</body>
+</html>

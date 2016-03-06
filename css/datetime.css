@@ -1,0 +1,239 @@
+/*datetime.css*/
+/*清除chrome下 同意“date”的默认样式*/
+		::-webkit-clear-button,
+		::-webkit-inner-spin-button,
+		::-webkit-calendar-picker-indicator {
+		  display:none;
+		}
+		[type="date"]::-webkit-datetime-edit-text {
+		  color: transparent;
+		}
+		[type="date"]::-webkit-datetime-edit-text:before {
+		  color: #000;
+		  content:'-';
+		  position: absolute;
+		}
+		::-webkit-datetime-edit-text,
+		::-webkit-datetime-edit-year-field,
+		::-webkit-datetime-edit-month-field,
+		::-webkit-datetime-edit-day-field,
+		::-webkit-datetime-edit-hour-field,
+		::-webkit-datetime-edit-minute-field,
+		::-webkit-datetime-edit-ampm-field {
+		  background: none;
+		}
+		
+		/*浮动与清除浮动*/
+		.clearfix{
+			zoom:1;
+		}
+		.clearfix:before{
+			display: table;
+			line-height: 0;
+			content: "";
+		}
+		.clearfix:after{
+			clear:both;
+		}
+		.left{
+			float: left;
+		}
+		.right{
+			float: right;
+		}
+
+		/*圆角设置*/
+		.DateTime-dropdown-box,
+		.DateTime-body,
+		.DateTime-header input{
+			border-radius: 4px;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			-ms-border-radius: 4px;
+			-o-border-radius: 4px;
+		}
+		.DateTime-header div span{
+			border-radius: 3px;
+			-webkit-border-radius: 3px;
+			-moz-border-radius: 3px;
+			-ms-border-radius: 3px;
+			-o-border-radius: 3px;
+		}
+		.DateTime-header .go-today{
+		    display: inline-block;
+		    height: 10px;
+		    width: 10px;
+		    margin: 7.5px;
+		    margin-top: 11px;
+		    background: #555;
+		    cursor:pointer;
+		}
+		.DateTime-header .go-today:hover{
+			background: #000;
+		}
+		.DateTime-header .go-today:active{
+			background: #aaa;
+		}
+
+
+
+		.DateTime-body ul li,
+		.DateTime-header .go-today{
+			border-radius: 50%;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			-ms-border-radius: 50%;
+			-o-border-radius: 50%;
+		}
+		/*动画设置*/
+		input[type="date"],
+		.DateTime-header div span,
+		.DateTime-body ul li,
+		.DateTime-dropdown-box,
+		.DateTime-header .go-today{
+			transition: all .15s ease;
+			-webkit-transition: all .15s ease;
+			-moz-transition: all .15s ease;
+			-ms-transition: all .15s ease;
+			-o-transition: all .15s ease;
+		}
+
+		input[type="date"]{
+			height:30px;
+			width:200px;
+			padding:0 10px;
+			border:1px solid #e0e0e0;
+			border-radius: 4px;
+			cursor: pointer;
+			outline: none;
+		}
+		input[type="date"]:focus{
+			border:1px solid green;
+		}
+		/* input[type="date"]:focus ~.DateTime-dropdown-box{
+			display: block;
+		} */
+
+		/*日期控件容器*/
+		.DateTime-dropdown-box{
+			display: none;
+			width:200px;
+			margin-top: 5px;
+			padding: 32px 8px 8px 8px ;
+			background: #f0f0f0;
+			border:1px solid #e0e0e0;
+			box-sizing:border-box;
+			position: fixed;
+			/*top: 0;*/
+			-webkit-user-select:none;
+			z-index: 9999;
+		}
+		
+		/*头部、脚部统一样式*/
+		.DateTime-header,
+		.DateTime-footer{
+			width: 100%;
+			height:32px;
+			margin-left: -8px;
+			padding:0 8px;
+			/*background: #f00;*/
+			position: absolute;
+			box-sizing:border-box;
+		}
+		/*头部/脚部的定位*/
+		.DateTime-header{
+			top:0;
+		}
+		.DateTime-footer{
+			bottom: 0;
+		}
+
+		/*年份、月份选择统一样式*/
+		.DateTime-header div{
+			height:24px;
+			padding-top: 5px;
+			font-size: 0;
+		}
+		.DateTime-header input{
+			width:30px;
+			margin:0 3px;
+			padding: 3px;
+			border:1px solid #e0e0e0;
+			text-align: center;
+			font-size: 12px;
+			outline: none;
+		}
+		
+		.DateTime-header div span{
+			display: inline-block;
+			height:18px;
+			line-height: 18px;
+			padding:0 5px;
+			font-size:12px;
+			font-weight: bold;
+			background: #fff;
+			color:#aaa;
+			cursor: pointer;
+
+		}
+		.DateTime-header div span:active{
+			background: #ccc;
+			color:#fff;
+		}
+		/*重写年份输入框长度*/
+		.DateTime-header .DateTime-year input{
+			width:50px;
+		}
+
+
+		.DateTime-body{
+			background: #fff;
+		}
+		/**/
+		.DateTime-body ul{
+			width:100%;
+			font-size:0px;
+			padding:0;
+		}
+		.DateTime-body ul.days{
+			min-height: 135px;
+		}
+		.DateTime-body ul li{
+			display: inline-block;
+			height:27px;
+			width:14.2857143%;
+			text-align: center;
+			line-height: 28px;
+			font-size: 12px;
+			color:#ccc;
+			list-style: none;
+			box-shadow: 1 1 1px #ccc;
+			box-sizing:border-box;
+			cursor: pointer;
+		}
+
+		/*周末日期字体颜色为红色*/
+		.DateTime-body .days ul li.this-month:nth-child(7n){
+			color:#f00;
+			border-right:none;
+		}
+		.DateTime-body .days ul li.this-month:nth-child(7n+1){
+			color:#f00;
+			border-right:none;
+		}
+		.DateTime-body ul li.this-month{
+			color:#333;
+		}
+		/*日期的hover、active样式/动画*/
+		.DateTime-body .days ul li.this-month:hover{
+			background: #06A1FD;
+			color: #fff;
+		}
+		.DateTime-body .days ul li.this-month:active{
+			background: #0173B7;
+			color: #fff;
+		}
+		.DateTime-body li.select{
+			background: #0173B7;
+			color: #fff!important;
+		}
