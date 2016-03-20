@@ -11,5 +11,5 @@ require.config({
 });
 
 require(["jquery","datetime"],function($,dt){
-	dt.init($("[type='date']"));
+	dt.DateTime.init($("[type='date']"));
 });
