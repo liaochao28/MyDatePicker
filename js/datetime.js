@@ -1,6 +1,6 @@
 // datetime.js
 
-define(["jquery"],function($){
+define(["widget","jquery"],function(widget,$){
 
 	var DateTime = function (dater){
 		var self = this;
@@ -56,10 +56,12 @@ define(["jquery"],function($){
 		//延后绘制部分(日期显示等到获取到相应节点后通过计算显示)
 		this.renderLater();
 
+		//点击外部 控件隐藏
 		$(document).on("click",function(){
 			self.dropDownBox.css("display","none");
 		});
 
+		//一次只显示一个控件
 		this.dater.on("click",function(e){
 			//一次只显示一个
 			$("input[type='date']").next(".DateTime-dropdown-box").css("display","none");
@@ -71,18 +73,17 @@ define(["jquery"],function($){
 			e.stopPropagation();
 		});
 
+		$(window).on("resize",function(){
+			self.setPosition();
+		});
+
 		//日期月份/年份筛选按钮的点击事件
 		//this.daysList = this.daysListBox.find("ul li");
 		this.boxHeader.find("span").each(function(){
 			$(this).on("click", function(){
-
 				self.pageChange($(this).attr("data-rule"))
 
-				//调用方法 将选择的日期赋给[type="date"]的value
-				var thisDay = $(self.daysListBox).find("li.select").val();
-				self.dateChoided(undefined,undefined,thisDay);
-
-				//self.clcikDatList();
+				self.showDateInInput();
 			});
 		});
 
@@ -92,12 +93,13 @@ define(["jquery"],function($){
 
 		//
 		this.goBack.on("click",function(){
-			//alert("go back");
+
 			var year = dateObj.getFullYear();
 			var month = dateObj.getMonth() + 1;
 			var day = dateObj.getDate();
+
 			//input[type="date"] value设置为当前日期
-			self.dateChoided(year,month,day);
+			self.showDateInInput(year,month,day);
 
 			//month/year input value设置为当前日期
 			self.choiceMonth.val(month);
@@ -123,56 +125,70 @@ define(["jquery"],function($){
 		//解决方案？
 		//日历月份或年份改变后 计算并重新绘制日期列表
 		//console.log(this.boxHeader.find("input"))
-		this.boxHeader.find("input").on("input propertychange", function(){
+		this.boxHeader.find("input").on("input propertychange", function(e){
 
+			var e = e || window.event;  // 事件对象
+			var clickEle = e.srcElement?e.srcElement:e.target;
+			if($(clickEle).parents(".DateTime-month").length > 0){
+
+			}else{
+				
+			}
 			self.renderLater();
-			//调用方法 将选择的日期赋给[type="date"]的value
-			var thisDay = $(self.daysListBox).find("li.select").val();
-			self.dateChoided(undefined,undefined,thisDay);
+
+			self.showDateInInput();
 		});
 
 	};
 
-	DateTime.prototype = {
+	DateTime.prototype = $.extend({},new widget.Widget(),{
 		//日期列表重新绘制后 重新获取并绑定事件
 		clcikDatList: function(){
 			var that = this;
+			var clickday;
 			//循环为日期列表每个li绑定点击事件
 			$(that.daysListBox).find("li.this-month").each(function(i){
 				$(this).on(
 					{
-						"click": function(){
+						"click": function(e){
+							var e = e || window.event;
+							var clickEle = e.srcElement?e.srcElement:e.target; 
+
+							clickday = clickEle.value;
 
 							//调用方法 将选择的日期赋给[type="date"]的value
-							that.dateChoided();
+							that.showDateInInput(clickday);
 
 							$(that.daysListBox).find("li").removeClass("select");
 							$(this).addClass("select");
 						},
 						"dblclick": function(){
-							alert("双击了,关闭控件");
-							//self.dropDownBox.css("display","none");
+
+							that.dropDownBox.css("display","none");
 						}
 				});
 			});
 		},
 		//点击列表选择日期 将选择的日期赋给[type="date"]的value值
-		dateChoided: function (year,month,day,e){
-			var e = e || event;
+		showDateInInput: function (year,month,day){
 			var self = this;
-			var clickEle = e.srcElement?e.srcElement:e.target;  
-			//console.log(day);
-			//console.log(clickDate);
-			//console.log(year+","+month+","+day)
-			var clickDay = day || $(clickEle).val();
-			var clickMonth = month || self.choiceMonth.val();
-			var clickYear = year || self.choiceYear.val();
-			var clickDate = clickYear+"-"+ self.addZero(clickMonth)+"-"+ self.addZero(clickDay);
-			self.dater.val(clickDate);
+			var args = arguments.length;
 
-			console.log("input控件的value值:")
-			console.log(self.dater.val())
-			console.log("-------------")
+			var clickDay = self.daysListBox.find("li.select").val();
+			var	clickMonth = self.choiceMonth.val();
+			var	clickYear = self.choiceYear.val();
+
+			if (args === 1) {
+				clickDay = arguments[0];
+			}else if(args === 3){
+				clickDay = day || self.daysListBox.find("li.select").val();
+				clickMonth = month || self.choiceMonth.val();
+				clickYear = year || self.choiceYear.val();
+			}
+			
+			var chioceDate = clickYear+"-"+ self.addZero(clickMonth)+"-"+ self.addZero(clickDay);
+
+			self.dater.val(chioceDate);
 		},
 		//翻页（月份和年份）
 		//传入点击对象属性：data-rule，表示需要执行的操作
@@ -255,7 +271,11 @@ define(["jquery"],function($){
 			outBox.append(header).append(body);
 			outBox.insertAfter(self.dater);
 		},
-		//延后绘制 获取到外部盒子后才绘制日期列表
+
+		/**
+		 *延后绘制 获取到外部盒子后才绘制日期列表
+		 *@param{ number } index 日期列表的有效下标值
+		**/
 		renderLater: function(index){
 			//alert("ok?")
 			var that = this;
@@ -292,11 +312,8 @@ define(["jquery"],function($){
 			//console.log(listStr)
 			that.daysListBox.find("ul").append($(listStr));
 
-			//日期列表重新绘制后 重新获取并绑定事件
+			//日期列表重新绘制后 重新获取日期列表元素并绑定事件
 			that.clcikDatList();
-
-			//console.log("画完")
-			//console.log($(this.daysListBox).find("li.this-month").size())
 		},
 		//日期对象/字符串日期的互相转换
 		dateTypeToggle: function (time){
@@ -344,10 +361,10 @@ define(["jquery"],function($){
 			lastDay = thatMonthFitstDay.getDay();
 
 			return {
-				firstDay: firstDay,
-				lastDay: lastDay,
-				dayCount: dayCount,
-				prevMonthDayCount: prevMonthDayCount
+				firstDay: firstDay,						//本月第一天
+				lastDay: lastDay,						//本月最后一天
+				dayCount: dayCount,						//本月天数
+				prevMonthDayCount: prevMonthDayCount	//上一月天数
 			};
 		},
 		//设置下拉框的位置
@@ -356,11 +373,11 @@ define(["jquery"],function($){
 			var offsetLeft;
 			var parent = that.dater.parent();
 			if(parent !== null && parent.css("display") != "none"){
-				offsetLeft = (that.dater.offset().left) - (parent.offset().left);
+				offsetLeft = (that.dater.offset().left);
 			}
-			that.dropDownBox.css("left",offsetLeft + 8);
+			that.dropDownBox.css("left",offsetLeft);
 		}
-	};
+	});
 
 	DateTime.init = function(dates){
 		var _this = this;
@@ -369,6 +386,6 @@ define(["jquery"],function($){
 		});
 	};
 
-	return DateTime;
-
+	return {DateTime: DateTime};
+	//return DateTime;
 })
