@@ -1,6 +1,6 @@
 // datetime.js
 
-define(["widget","jquery"],function(widget,$){
+define(["jquery"],function($){
 
 	var DateTime = function (dater){
 		var self = this;
