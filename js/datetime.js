@@ -141,7 +141,8 @@ define(["jquery"],function($){
 
 	};
 
-	DateTime.prototype = $.extend({},new widget.Widget(),{
+	DateTime.prototype = {
+		constructor : DateTime,
 		//日期列表重新绘制后 重新获取并绑定事件
 		clcikDatList: function(){
 			var that = this;
@@ -377,7 +378,7 @@ define(["jquery"],function($){
 			}
 			that.dropDownBox.css("left",offsetLeft);
 		}
-	});
+	};
 
 	DateTime.init = function(dates){
 		var _this = this;
